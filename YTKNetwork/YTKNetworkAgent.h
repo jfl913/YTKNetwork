@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 ///  serialization and response handling.
 @interface YTKNetworkAgent : NSObject
 
-- (instancetype)init NS_UNAVAILABLE;
+- (instancetype)init NS_UNAVAILABLE; // 下次自己写的自定义view不支持这样初始化的时候，也可以这样干。
 + (instancetype)new NS_UNAVAILABLE;
 
 ///  Get the shared agent.

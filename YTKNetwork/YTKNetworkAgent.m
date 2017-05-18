@@ -135,6 +135,8 @@
     return [NSURL URLWithString:detailUrl relativeToURL:url].absoluteString;
 }
 
+// 通过重写YTKBaseRequest的方法来配置AFHTTPRequestSerializer
+// 可以通过重写- (NSArray *)requestAuthorizationHeaderFieldArray来配置登录信息
 - (AFHTTPRequestSerializer *)requestSerializerForRequest:(YTKBaseRequest *)request {
     AFHTTPRequestSerializer *requestSerializer = nil;
     if (request.requestSerializerType == YTKRequestSerializerTypeHTTP) {
@@ -199,9 +201,12 @@
     NSURLRequest *customUrlRequest= [request buildCustomUrlRequest];
     if (customUrlRequest) {
         __block NSURLSessionDataTask *dataTask = nil;
-        dataTask = [_manager dataTaskWithRequest:customUrlRequest completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
-            [self handleRequestResult:dataTask responseObject:responseObject error:error];
-        }];
+        dataTask = [_manager dataTaskWithRequest:customUrlRequest
+                                  uploadProgress:nil
+                                downloadProgress:nil
+                               completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+                                   [self handleRequestResult:dataTask responseObject:responseObject error:error];
+                               }];
         request.requestTask = dataTask;
     } else {
         request.requestTask = [self sessionTaskForRequest:request error:&requestSerializationError];
@@ -445,7 +450,9 @@
 
     __block NSURLSessionDataTask *dataTask = nil;
     dataTask = [_manager dataTaskWithRequest:request
-                           completionHandler:^(NSURLResponse * __unused response, id responseObject, NSError *_error) {
+                              uploadProgress:nil
+                            downloadProgress:nil
+                           completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable _error) {
                                [self handleRequestResult:dataTask responseObject:responseObject error:_error];
                            }];
 
