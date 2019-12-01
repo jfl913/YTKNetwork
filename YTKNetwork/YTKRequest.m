@@ -386,6 +386,9 @@ static dispatch_queue_t ytkrequest_cache_writing_queue() {
 }
 
 - (NSString *)cacheBasePath {
+    // Library 目录存储那些不能直接被用户看见的文件。
+    // 这些文件会自动备份。如果不想备份的话，可以使用 NSURL 的 setResourceValue:forKey:error: 方法为文件加上 NSURLIsExcludedFromBackupKey 属性。
+    // 参考 + (void)addDoNotBackupAttribute:(NSString *)path。
     NSString *pathOfLibrary = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     NSString *path = [pathOfLibrary stringByAppendingPathComponent:@"LazyRequestCache"];
 

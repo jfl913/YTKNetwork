@@ -199,6 +199,8 @@ NSString *const YTKRequestValidationErrorDomain = @"com.yuantiku.request.validat
 
 - (BOOL)statusCodeValidator {
     NSInteger statusCode = [self responseStatusCode];
+    // https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status
+    // 响应分为五类：信息响应(100–199)，成功响应(200–299)，重定向(300–399)，客户端错误(400–499)和服务器错误 (500–599)。
     return (statusCode >= 200 && statusCode <= 299);
 }
 
