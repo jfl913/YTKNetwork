@@ -144,6 +144,7 @@ static dispatch_queue_t ytkrequest_cache_writing_queue() {
     [super requestCompletePreprocessor];
 
     if (self.writeCacheAsynchronously) {
+        // 只在为了避免多线程编程问题之一——多个线程更新相同资源导致数据竞争时使用 Serial Dispatch Queue。
         dispatch_async(ytkrequest_cache_writing_queue(), ^{
             [self saveResponseDataToCacheFile:[super responseData]];
         });
